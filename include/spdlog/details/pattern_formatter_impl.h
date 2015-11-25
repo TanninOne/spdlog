@@ -285,6 +285,14 @@ class p_formatter :public flag_formatter
     }
 };
 
+// Process
+class P_formatter :public flag_formatter
+{
+    void format(details::log_msg& msg, const std::tm&) override
+    {
+        msg.formatted << ::GetCurrentProcessId();
+    }
+};
 
 // 12 hour clock 02:55:02 pm
 class r_formatter :public flag_formatter
@@ -592,6 +600,10 @@ inline void spdlog::pattern_formatter::handle_flag(char flag)
 
     case('p') :
         _formatters.push_back(std::unique_ptr<details::flag_formatter>(new details::p_formatter()));
+        break;
+
+    case('P') :
+        _formatters.push_back(std::unique_ptr<details::flag_formatter>(new details::P_formatter()));
         break;
 
     case('r') :
